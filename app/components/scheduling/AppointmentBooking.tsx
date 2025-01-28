@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import SlotButton from "./common/SlotButton";
-import { useSelectedDate } from "../context/SelectedDateContext";
+import SlotButton from "./SlotButton";
+import { useSelectedDate } from "../../context/SelectedDateContext";
 
 const AppointmentBooking = () => {
   const { selectedDate } = useSelectedDate();

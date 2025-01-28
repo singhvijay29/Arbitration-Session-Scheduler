@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { useScheduler } from "../context/SchedulerContext";
 import { useRouter } from "next/navigation";
 import { useRole } from "../context/RoleContext";
-import Toast from "../components/Toast";
+import Toast from "../components/common/Toast";
 
 // Add this interface near the top of the file, after the imports
 interface Session {

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
-import Drawer from "./components/Drawer";
+import Sidebar from "./components/layout/Sidebar";
+import Navbar from "./components/layout/Navbar";
+import Drawer from "./components/layout/Drawer";
 import { useRole } from "./context/RoleContext";
 
 export default function RootLayoutClient({

@@ -1,8 +1,8 @@
 "use client";
 
-import AppointmentBooking from "./components/AppointmentBooking";
-import Calendar from "./components/Calendar";
-import ScheduledSessions from "./components/ScheduledSessions";
+import AppointmentBooking from "./components/scheduling/AppointmentBooking";
+import Calendar from "./components/calendar/Calendar";
+import ScheduledSessions from "./components/scheduling/ScheduledSessions";
 import { useRole } from "./context/RoleContext";
 import { useScheduler } from "./context/SchedulerContext";
 

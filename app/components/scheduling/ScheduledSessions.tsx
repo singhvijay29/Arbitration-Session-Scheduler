@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useSelectedDate } from "../context/SelectedDateContext";
-import { Session } from "../context/SchedulerContext";
+import { useSelectedDate } from "../../context/SelectedDateContext";
+import { Session } from "../../context/SchedulerContext";
 
 export default function ScheduledSessions() {
   const { selectedDate } = useSelectedDate();

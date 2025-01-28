@@ -1,6 +1,6 @@
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { useRole } from "../context/RoleContext";
+import { useRole } from "../../context/RoleContext";
 import { usePathname } from "next/navigation";
 
 interface NavbarProps {
