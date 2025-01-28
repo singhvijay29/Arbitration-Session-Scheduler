@@ -63,7 +63,7 @@ const EventManagement: React.FC = () => {
                     </h2>
                   </div>
                   <div className="text-sm text-gray-600">
-                    Respondent:{event.respondent}
+                    Respondent: {event.respondent}
                     <br />
                     Claimant: {event.claimant}
                   </div>

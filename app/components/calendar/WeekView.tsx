@@ -21,7 +21,7 @@ export default function WeekView({
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden flex flex-col">
-      <div className="w-[600px] min-w-full overflow-x-auto">
+      <div className="w-[600px] min-w-full overflow-x-auto no-scrollbar">
         <div className="grid grid-cols-8 border-b bg-white sticky top-0 min-w-[800px]">
           <div className="p-4 border-r"></div>
           {days.map((date) => (
@@ -36,7 +36,7 @@ export default function WeekView({
             </div>
           ))}
         </div>
-        <div className="divide-y overflow-y-auto h-[calc(600px-65px)] min-w-[800px]">
+        <div className="divide-y overflow-y-auto no-scrollbar h-[calc(600px-65px)] min-w-[800px]">
           {hours.map((hour) => (
             <div key={hour} className="grid grid-cols-8">
               <div className="py-4 px-2 text-right text-sm text-gray-500 border-r">

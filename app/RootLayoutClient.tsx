@@ -19,12 +19,7 @@ export default function RootLayoutClient({
       <Navbar onOpenDrawer={() => setIsDrawerOpen(!isDrawerOpen)} />
       <div className="flex flex-1 mt-[74px] h-[100vh] overflow-hidden">
         {role === "arbitrator" && <Sidebar />}
-        {role === "arbitrator" && (
-          <Drawer
-            isOpen={isDrawerOpen}
-            onClose={() => setIsDrawerOpen(false)}
-          />
-        )}
+        <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
         <main
           className={`flex-1 p-4 md:p-8 ${
             role === "arbitrator" ? "lg:ml-[250px]" : ""
