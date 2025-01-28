@@ -258,12 +258,6 @@ const dummyData = [
   },
 ];
 
-// Add this helper function to handle localStorage updates
-const updateLocalStorageWithEvent = (key: string, data: any) => {
-  localStorage.setItem(key, JSON.stringify(data));
-  window.dispatchEvent(new Event("storage"));
-};
-
 export const SchedulerProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -288,12 +282,6 @@ export const SchedulerProvider: React.FC<{ children: ReactNode }> = ({
     setSessions(sortSessions(sessionsToLoad));
     setIsInitialized(true);
   }, []);
-
-  const updateLocalStorage = (sessions: Session[]) => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("sessions", JSON.stringify(sessions));
-    }
-  };
 
   const addSession = (session: Session) => {
     const updatedSessions = sortSessions([...sessions, session]);

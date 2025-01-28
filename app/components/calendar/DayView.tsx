@@ -1,9 +1,10 @@
 import React from "react";
+import { Event } from "./types";
 
 interface DayViewProps {
   currentDate: Date;
-  events: any[];
-  onEventClick: (event: any) => void;
+  events: Event[]; // Updated type
+  onEventClick: (event: Event) => void; // Updated type
 }
 
 const DayView: React.FC<DayViewProps> = ({

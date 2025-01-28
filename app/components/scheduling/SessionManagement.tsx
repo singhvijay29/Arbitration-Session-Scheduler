@@ -1,5 +1,5 @@
 import type React from "react";
-import { useScheduler } from "../context/SchedulerContext";
+import { useScheduler } from "../../context/SchedulerContext";
 import Link from "next/link";
 
 const SessionManagement: React.FC = () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, JSX } from "react";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ViewSelector from "./ViewSelector";
 import { useSelectedDate } from "../../context/SelectedDateContext";
