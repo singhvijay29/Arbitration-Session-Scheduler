@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { useSelectedDate } from "../context/SelectedDateContext";
-import { useScheduler } from "../context/SchedulerContext";
-import type { Session } from "../context/SchedulerContext";
+import { Session } from "../context/SchedulerContext";
 
 export default function ScheduledSessions() {
   const { selectedDate } = useSelectedDate();
-  const { sessions } = useScheduler();
 
   const [filteredSessions, setFilteredSessions] = useState<Session[]>([]);
 
@@ -16,8 +14,11 @@ export default function ScheduledSessions() {
       year: "numeric",
     });
 
+    const bookedSlots = JSON.parse(
+      localStorage.getItem("booked_slots") || "[]"
+    );
     setFilteredSessions(
-      sessions.filter((session) => {
+      bookedSlots.filter((session: Session) => {
         const sessionDate = new Date(session.date).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
@@ -26,7 +27,7 @@ export default function ScheduledSessions() {
         return sessionDate === formattedDate;
       })
     );
-  }, [selectedDate, sessions]);
+  }, [selectedDate]);
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-sm">
@@ -42,6 +43,10 @@ export default function ScheduledSessions() {
                 <h3 className="font-medium">
                   Session with {session.arbitrator}
                 </h3>
+                <p className="text-sm text-gray-500">
+                  Respondent: {session.respondent} <br /> Claimant:{" "}
+                  {session.claimant}
+                </p>
                 <p className="text-sm text-gray-500">
                   {session.date}, {session.time} - {session.end_time}
                 </p>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { SchedulerProvider } from "./context/SchedulerContext";
 import { SelectedDateProvider } from "./context/SelectedDateContext";
 import RootLayoutClient from "./RootLayoutClient";
+import { RoleProvider } from "./context/RoleContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <SchedulerProvider>
           <SelectedDateProvider>
-            <RootLayoutClient>{children}</RootLayoutClient>
+            <RoleProvider>
+              <RootLayoutClient>{children}</RootLayoutClient>
+            </RoleProvider>
           </SelectedDateProvider>
         </SchedulerProvider>
       </body>

@@ -22,7 +22,7 @@ export default function Calendar({ events }: { events: Event[] }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState<CalendarView>("month");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const { setSelectedDate } = useSelectedDate();
+  const { setSelectedDate, selectedDate } = useSelectedDate();
 
   const isDateDisabled = (date: Date) => {
     const today = new Date();
@@ -37,56 +37,61 @@ export default function Calendar({ events }: { events: Event[] }) {
   };
 
   const renderDayView = () => {
-    const hours = Array.from({ length: 24 }, (_, i) => i); // Change to 24-hour format
+    const hours = Array.from({ length: 12 }, (_, i) => i + 9); // 9am to 8pm
     const dayEvents = events.filter(
       (event) =>
         new Date(event.date).toDateString() === currentDate.toDateString()
     );
 
     return (
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 w-full">
+        <div className="p-6 border-b bg-gradient-to-r from-blue-50 to-purple-50">
+          <h2 className="text-xl font-semibold text-gray-800">
             {currentDate.toLocaleDateString("en-US", {
               weekday: "long",
+              year: "numeric",
               month: "long",
               day: "numeric",
-              year: "numeric",
             })}
           </h2>
         </div>
-        <div className="divide-y">
-          {hours.map((hour) => {
-            const hourEvents = dayEvents.filter(
-              (event) => parseInt(event.time.split(":")[0]) === hour
-            );
-
-            return (
-              <div key={hour} className="flex">
-                <div className="w-20 py-4 px-2 text-right text-sm text-gray-500">
-                  {hour % 12 || 12}
-                  {hour < 12 ? "AM" : "PM"}
-                </div>
-                <div className="flex-1 py-4 px-4 border-l">
-                  {hourEvents.map((event) => (
+        <div className="divide-y divide-gray-100">
+          {hours.map((hour) => (
+            <div
+              key={hour}
+              className="flex items-start p-4 hover:bg-gray-50 transition-colors"
+            >
+              <div className="w-20 text-sm font-medium text-gray-500">
+                {hour === 9
+                  ? "9 AM"
+                  : hour < 12
+                  ? `${hour} AM`
+                  : hour === 12
+                  ? "12 PM"
+                  : `${hour - 12} PM`}
+              </div>
+              <div className="flex-1 min-h-[60px] pl-4 border-l border-gray-200">
+                {dayEvents
+                  .filter(
+                    (event) => parseInt(event.time.split(":")[0]) === hour
+                  )
+                  .map((event) => (
                     <div
                       key={event.id}
-                      className="bg-blue-100 p-2 rounded mb-2 cursor-pointer hover:bg-blue-200"
                       onClick={() => setSelectedEvent(event)}
+                      className="p-2 mb-2 rounded-lg bg-blue-100 hover:bg-blue-200 cursor-pointer transition-colors"
                     >
-                      <div className="font-semibold">
-                        Case {event.caseNumber}
+                      <div className="font-medium text-blue-900">
+                        {event.caseNumber}
                       </div>
-                      <div className="text-sm">Time: {event.time}</div>
-                      <div className="text-sm">
-                        Arbitrator: {event.arbitrator}
+                      <div className="text-sm text-blue-700">
+                        {event.arbitrator} • {event.time}
                       </div>
                     </div>
                   ))}
-                </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -203,6 +208,8 @@ export default function Calendar({ events }: { events: Event[] }) {
             ${
               isToday
                 ? "bg-blue-500 text-white cursor-pointer"
+                : currentDay.toDateString() === selectedDate?.toDateString()
+                ? "bg-blue-200 text-blue-800 cursor-pointer"
                 : isDayDisabled
                 ? "text-gray-300 cursor-not-allowed"
                 : "hover:bg-gray-200 cursor-pointer"
@@ -284,36 +291,29 @@ export default function Calendar({ events }: { events: Event[] }) {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="w-full flex flex-row justify-between items-start sm:items-center gap-4">
-          <ViewSelector
-            currentView={currentView}
-            onViewChange={setCurrentView}
-          />
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => navigateDate("prev")}
-              className="p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <span className="font-medium text-[14px] md:text-[16px]">
-              {currentDate.toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-                ...(currentView === "day" && { day: "numeric" }),
-                ...(currentView === "week" && { day: "numeric" }),
-              })}
-            </span>
-            <button
-              onClick={() => navigateDate("next")}
-              className="p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
+    <div className="md:p-4 space-y-4">
+      <div className="flex flex-col sm:flex-row justify-between gap-4">
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={() => navigateDate("prev")}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          </button>
+          <h2 className="text-xl font-semibold text-gray-800">
+            {currentDate.toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })}
+          </h2>
+          <button
+            onClick={() => navigateDate("next")}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <ChevronRight className="w-5 h-5 text-gray-600" />
+          </button>
         </div>
+        <ViewSelector currentView={currentView} onViewChange={setCurrentView} />
       </div>
 
       {currentView === "day" && renderDayView()}

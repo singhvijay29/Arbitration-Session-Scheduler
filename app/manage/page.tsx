@@ -1,27 +1,19 @@
 "use client";
 
 import type React from "react";
-import { useScheduler } from "../context/SchedulerContext";
+import { Session, useScheduler } from "../context/SchedulerContext";
 import Link from "next/link";
+import { Delete, Edit } from "lucide-react";
+import { useRole } from "../context/RoleContext";
 
-// Add this interface before the component
-interface Session {
-  id: string;
-  caseNumber: string;
-  date: string;
-  time: string;
-  duration: string;
-  arbitrator: string;
-}
-
-const SessionManagement: React.FC = () => {
+const EventManagement: React.FC = () => {
   const { sessions, deleteSession } = useScheduler();
+  const { role } = useRole();
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-[20px] md:text-2xl font-semibold mb-4">
-        Manage Sessions
-      </div>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-8">Events</h1>
+
       {sessions.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
           <p>No sessions found.</p>
@@ -29,52 +21,80 @@ const SessionManagement: React.FC = () => {
             href="/schedule"
             className="text-blue-500 hover:underline mt-2 inline-block"
           >
-            Schedule a new session
+            Create a new event
           </Link>
         </div>
       ) : (
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-2">Case Number</th>
-              <th className="border p-2">Date</th>
-              <th className="border p-2">Time</th>
-              <th className="border p-2">Duration</th>
-              <th className="border p-2">Arbitrator</th>
-              <th className="border p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sessions.map((session: Session) => (
-              <tr key={session.id}>
-                <td className="border p-2">{session.caseNumber}</td>
-                <td className="border p-2">
-                  {new Date(session.date).toDateString()}
-                </td>
-                <td className="border p-2">{session.time}</td>
-                <td className="border p-2">{session.duration} mins</td>
-                <td className="border p-2">{session.arbitrator}</td>
-                <td className="border p-2">
-                  <Link
-                    href={`/schedule?id=${session.id}`}
-                    className="text-blue-500 mr-2"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => deleteSession(session.id)}
-                    className="text-red-500"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="space-y-4">
+          {sessions.map((event: Session) => (
+            <div
+              key={event.id}
+              className="bg-white rounded-lg p-6 flex items-start justify-between shadow-md"
+            >
+              <div className="flex flex-col items-start md:flex-row gap-6">
+                {/* Date/Time Section */}
+                <div className="bg-gray-50 rounded-lg p-4 text-center min-w-[120px]">
+                  <div className="text-gray-600 uppercase text-sm font-medium">
+                    {(() => {
+                      const eventDate = new Date(event.date);
+                      const today = new Date();
+                      const tomorrow = new Date();
+                      tomorrow.setDate(today.getDate() + 1);
+
+                      if (eventDate.toDateString() === today.toDateString()) {
+                        return "Today";
+                      } else if (
+                        eventDate.toDateString() === tomorrow.toDateString()
+                      ) {
+                        return "Tomorrow";
+                      } else {
+                        return event.date;
+                      }
+                    })()}
+                  </div>
+                  <div className="text-2xl font-bold">{event.time}</div>
+                </div>
+
+                {/* Event Details */}
+                <div className="flex flex-col">
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">
+                      {event.caseNumber} by {event.arbitrator}
+                    </h2>
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Respondent:{event.respondent}
+                    <br />
+                    Claimant: {event.claimant}
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              {role !== "user" && (
+                <div className="flex items-center gap-4">
+                  <div className="flex gap-4">
+                    <Link
+                      href={`/schedule?id=${event.id}`}
+                      className="text-blue-500 hover:underline"
+                    >
+                      <Edit className="w-5 h-5" />
+                    </Link>
+                    <button
+                      onClick={() => deleteSession(event.id)}
+                      className="text-red-500 hover:underline"
+                    >
+                      <Delete className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
 };
 
-export default SessionManagement;
+export default EventManagement;
