@@ -1,7 +1,7 @@
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useRole } from "../../context/RoleContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface NavbarProps {
   onOpenDrawer: () => void;
@@ -9,7 +9,7 @@ interface NavbarProps {
 
 export default function Navbar({ onOpenDrawer }: NavbarProps) {
   const { role, setRole } = useRole();
-
+  const router = useRouter();
   const pathname = usePathname();
 
   const isActive = (path: string) => pathname === path;
@@ -25,36 +25,36 @@ export default function Navbar({ onOpenDrawer }: NavbarProps) {
       <div className="flex items-center gap-4">
         {role === "user" && (
           <div className="hidden md:flex gap-2">
-            <Link
-              href="/"
-              className={`block py-2 px-4 rounded-lg ${
+            <div
+              onClick={() => router?.push("/")}
+              className={`block py-2 px-4 rounded-lg cursor-pointer ${
                 isActive("/")
                   ? "bg-gray-100 font-medium"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >
               Calendar
-            </Link>
-            <Link
-              href="/schedule"
-              className={`block py-2 px-4 rounded-lg ${
+            </div>
+            <div
+              onClick={() => router?.push("/schedule")}
+              className={`block py-2 px-4 rounded-lg cursor-pointer ${
                 isActive("/schedule")
                   ? "bg-gray-100 font-medium"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >
               Schedule Session
-            </Link>
-            <Link
-              href="/manage"
-              className={`block py-2 px-4 rounded-lg ${
+            </div>
+            <div
+              onClick={() => router?.push("/manage")}
+              className={`block py-2 px-4 rounded-lg cursor-pointer ${
                 isActive("/manage")
                   ? "bg-gray-100 font-medium"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >
               Booking Management
-            </Link>
+            </div>
           </div>
         )}
         <div className="flex items-center bg-gray-100 rounded-lg p-1">
