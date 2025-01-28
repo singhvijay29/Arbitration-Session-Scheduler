@@ -56,7 +56,15 @@ export const SchedulerProvider: React.FC<{ children: ReactNode }> = ({
     const sessionsToLoad = storedSessions
       ? JSON.parse(storedSessions)
       : dummyData;
-    setSessions(sortSessions(sessionsToLoad));
+
+    // Filter sessions to only include those with a date and time greater than the current date and time
+    const currentDateTime = new Date();
+    const filteredSessions = sessionsToLoad.filter((session: Session) => {
+      const sessionDateTime = new Date(`${session.date}T${session.time}`);
+      return sessionDateTime > currentDateTime;
+    });
+
+    setSessions(sortSessions(filteredSessions));
     setIsInitialized(true);
   }, []);
 

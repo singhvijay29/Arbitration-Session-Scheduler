@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useRole } from "../context/RoleContext";
 import Toast from "../components/common/Toast";
 
-// Add this interface near the top of the file, after the imports
 interface Session {
   id: string;
   caseNumber: string;
@@ -39,6 +38,13 @@ const SessionForm: React.FC = () => {
     message: string;
     type: "error" | "success";
   } | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const currentDateTime = new Date();
+  const currentDate = currentDateTime.toISOString().split("T")[0];
+  const currentHour = currentDateTime.getHours();
+  const currentMinutes = currentDateTime.getMinutes();
+  const isToday = formData.date === currentDate;
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -49,7 +55,6 @@ const SessionForm: React.FC = () => {
         (session: Session) => session.id === id
       );
       if (sessionToEdit) {
-        // Handle both formats: separate date/time fields or end_time ISO string
         let date, time;
         if (sessionToEdit.date && sessionToEdit.time) {
           date = sessionToEdit.date;
@@ -118,12 +123,14 @@ const SessionForm: React.FC = () => {
     });
 
     if (arbitratorConflict) {
+      setLoading(false);
       setToast({
         message: "The arbitrator is already booked for this time slot.",
         type: "error",
       });
       return;
     }
+    setLoading(true);
 
     const sessionData = {
       id: editMode ? sessionId! : Date.now().toString(),
@@ -139,10 +146,13 @@ const SessionForm: React.FC = () => {
       addSession(sessionData);
       setToast({ message: "Session scheduled successfully", type: "success" });
     }
-    router.push("/");
+
+    setTimeout(() => {
+      router.push("/");
+      setLoading(false);
+    }, 3000);
   };
 
-  // Redirect if not an arbitrator
   if (role !== "arbitrator") {
     return (
       <div className="text-center py-8">
@@ -156,6 +166,7 @@ const SessionForm: React.FC = () => {
 
   return (
     <>
+      {loading && <div className="loader">Loading...</div>}
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="text-[20px] md:text-2xl font-semibold mb-2">
           {editMode ? "Edit Session" : "Schedule New Session"}
@@ -179,6 +190,7 @@ const SessionForm: React.FC = () => {
             value={formData.date}
             onChange={handleChange}
             required
+            min={new Date().toISOString().split("T")[0]}
             className="w-full px-3 py-2 border rounded"
           />
         </div>
@@ -198,8 +210,15 @@ const SessionForm: React.FC = () => {
               const time = `${hour.toString().padStart(2, "0")}:${minutes}`;
               const ampm = hour >= 12 ? "PM" : "AM";
               const hour12 = hour > 12 ? hour - 12 : hour;
+
+              const isDisabled =
+                isToday &&
+                (hour < currentHour ||
+                  (hour === currentHour &&
+                    parseInt(minutes) <= currentMinutes));
+
               return (
-                <option key={time} value={time}>
+                <option key={time} value={time} disabled={isDisabled}>
                   {`${hour12}:${minutes} ${ampm}`}
                 </option>
               );
@@ -255,9 +274,14 @@ const SessionForm: React.FC = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded"
+          className="w-full bg-blue-500 text-white py-2 rounded flex items-center justify-center"
+          disabled={loading}
         >
-          {editMode ? "Update Session" : "Schedule Session"}
+          {loading ? (
+            <span className="loader">Loading...</span>
+          ) : (
+            <span>{editMode ? "Update Session" : "Schedule Session"}</span>
+          )}
         </button>
       </form>
       {toast && (
