@@ -63,6 +63,7 @@ export default function Calendar({ events }: { events: Event[] }) {
           </button>
           <h2 className="text-xl font-semibold text-gray-800">
             {currentDate.toLocaleDateString("en-US", {
+              day: "2-digit",
               month: "long",
               year: "numeric",
             })}

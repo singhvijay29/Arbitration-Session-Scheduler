@@ -7,7 +7,13 @@ interface Slot {
   arbitrator: string;
 }
 
-const SlotButton = ({ el }: { el: Slot }) => {
+const SlotButton = ({
+  el,
+  onBookingChange,
+}: {
+  el: Slot;
+  onBookingChange?: () => void;
+}) => {
   const [isBooked, setIsBooked] = useState(false);
 
   useEffect(() => {
@@ -26,6 +32,7 @@ const SlotButton = ({ el }: { el: Slot }) => {
       const updatedBookings = [...bookedSlots, el];
       localStorage.setItem("booked_slots", JSON.stringify(updatedBookings));
       setIsBooked(true);
+      onBookingChange?.();
     }
   };
 

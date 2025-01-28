@@ -2,9 +2,11 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import SlotButton from "./SlotButton";
 import { useSelectedDate } from "../../context/SelectedDateContext";
+import { useScheduler } from "../../context/SchedulerContext";
 
 const AppointmentBooking = () => {
   const { selectedDate } = useSelectedDate();
+  const { bookingVersion, setBookingVersion } = useScheduler();
   const [selectedArbitrator, setSelectedArbitrator] = useState<string>("all");
   const [availableSlot, setAvailableSlot] = useState<{
     date: string;
@@ -29,7 +31,7 @@ const AppointmentBooking = () => {
       slots: sessions,
     };
     setAvailableSlot(formattedSlots);
-  }, [selectedDate]);
+  }, [selectedDate, bookingVersion]);
 
   // Get unique arbitrators from slots
   const arbitrators = [
@@ -47,6 +49,10 @@ const AppointmentBooking = () => {
       (selectedArbitrator === "all" || slot.arbitrator === selectedArbitrator)
     );
   });
+
+  const handleBookingChange = () => {
+    setBookingVersion((v: number) => v + 1);
+  };
 
   return (
     <div
@@ -109,7 +115,10 @@ const AppointmentBooking = () => {
                   <>
                     {filteredSlots.map((el, i) => (
                       <React.Fragment key={i}>
-                        <SlotButton el={el} />
+                        <SlotButton
+                          el={el}
+                          onBookingChange={handleBookingChange} // This prop needs to be passed
+                        />
                       </React.Fragment>
                     ))}
                   </>
@@ -124,24 +133,3 @@ const AppointmentBooking = () => {
 };
 
 export default AppointmentBooking;
-
-export const initializeDummyData = () => {
-  const existingSessions = localStorage.getItem("sessions");
-  if (!existingSessions) {
-    const dummyData = [
-      {
-        id: "1737980000000",
-        caseNumber: "70460",
-        date: "2025-02-02",
-        time: "16:11",
-        duration: "45",
-        arbitrator: "vijay",
-        claimant: "singhvijay8529@gmail.com",
-        respondent: "singhvijay8529@gmail.com",
-        end_time: "16:56",
-      },
-      // ... rest of the data
-    ];
-    localStorage.setItem("sessions", JSON.stringify(dummyData));
-  }
-};

@@ -18,6 +18,10 @@ const DayView: React.FC<DayViewProps> = ({
       new Date(event.date).toDateString() === currentDate.toDateString()
   );
 
+  console.log("Current Date:", currentDate);
+  console.log("Events:", events);
+  console.log("Day Events:", dayEvents);
+
   return (
     <div className="divide-y divide-gray-100">
       {hours.map((hour) => (

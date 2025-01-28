@@ -26,6 +26,8 @@ interface SchedulerContextType {
   addSession: (session: Session) => void;
   updateSession: (id: string, updatedSession: Session) => void;
   deleteSession: (id: string) => void;
+  bookingVersion: number;
+  setBookingVersion: (value: number | ((prev: number) => number)) => void;
 }
 
 const SchedulerContext = createContext<SchedulerContextType | undefined>(
@@ -256,25 +258,6 @@ const dummyData = [
   },
 ];
 
-const safeLocalStorage = {
-  get: (key: string) => {
-    try {
-      return JSON.parse(localStorage.getItem(key) || "[]");
-    } catch (error) {
-      console.error("Error reading from localStorage:", error);
-      return [];
-    }
-  },
-  set: (key: string, value: any) => {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-      window.dispatchEvent(new Event("storage"));
-    } catch (error) {
-      console.error("Error writing to localStorage:", error);
-    }
-  },
-};
-
 // Add this helper function to handle localStorage updates
 const updateLocalStorageWithEvent = (key: string, data: any) => {
   localStorage.setItem(key, JSON.stringify(data));
@@ -286,6 +269,7 @@ export const SchedulerProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [bookingVersion, setBookingVersion] = useState(0);
 
   const sortSessions = (sessions: Session[]) => {
     return [...sessions].sort((a, b) => a.date.localeCompare(b.date));
@@ -337,7 +321,14 @@ export const SchedulerProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <SchedulerContext.Provider
-      value={{ sessions, addSession, updateSession, deleteSession }}
+      value={{
+        sessions,
+        addSession,
+        updateSession,
+        deleteSession,
+        bookingVersion,
+        setBookingVersion,
+      }}
     >
       {children}
     </SchedulerContext.Provider>

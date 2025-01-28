@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useSelectedDate } from "../../context/SelectedDateContext";
-import { Session } from "../../context/SchedulerContext";
+import { Session, useScheduler } from "../../context/SchedulerContext";
 
 export default function ScheduledSessions() {
   const { selectedDate } = useSelectedDate();
+  const { bookingVersion, setBookingVersion } = useScheduler();
 
   const [filteredSessions, setFilteredSessions] = useState<Session[]>([]);
 
@@ -27,11 +28,36 @@ export default function ScheduledSessions() {
         return sessionDate === formattedDate;
       })
     );
-  }, [selectedDate]);
+  }, [selectedDate, bookingVersion]);
+
+  const handleCancelSession = (sessionId: string) => {
+    const bookedSlots = JSON.parse(
+      localStorage.getItem("booked_slots") || "[]"
+    );
+    const updatedSlots = bookedSlots.filter(
+      (session: Session) => session.id !== sessionId
+    );
+    localStorage.setItem("booked_slots", JSON.stringify(updatedSlots));
+    handleBookingChange();
+    setFilteredSessions(
+      bookedSlots.filter((session: Session) => {
+        const sessionDate = new Date(session.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+        return sessionDate === updatedSlots;
+      })
+    );
+  };
+
+  const handleBookingChange = () => {
+    setBookingVersion((v: number) => v + 1);
+  };
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-sm">
-      <h2 className="text-xl font-semibold mb-6">Scheduled Sessions</h2>
+      <h2 className="text-xl font-semibold mb-6">Booked Slots</h2>
       <div className="space-y-4">
         {filteredSessions.length > 0 ? (
           filteredSessions.map((session) => (
@@ -51,6 +77,12 @@ export default function ScheduledSessions() {
                   {session.date}, {session.time} - {session.end_time}
                 </p>
               </div>
+              <button
+                onClick={() => handleCancelSession(session.id)}
+                className="text-red-500 hover:underline ml-3"
+              >
+                Cancel Session
+              </button>
             </div>
           ))
         ) : (
