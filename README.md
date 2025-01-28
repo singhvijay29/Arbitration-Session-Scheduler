@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## System Design Overview
+The system is designed to manage arbitration sessions efficiently. It allows users (arbitrators and clients) to schedule, manage, and view sessions through a web application built with Next.js. Below are the key components and assumptions made during the design process.
+Key Components
 
-## Getting Started
+# User Roles:
+Arbitrator: Can schedule sessions, manage existing sessions, and view their calendar.
+User: Can view the calendar and book sessions.
+Session Management:
+Sessions are represented by a Session interface, which includes details like case number, date, time, duration, arbitrator, claimant, and respondent.
+Sessions are stored in local storage for persistence across sessions.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Context Providers:
+SchedulerContext: Manages session data and provides functions to add, update, and delete sessions.
+RoleContext: Manages user roles and provides functionality to switch between roles.
+SelectedDateContext: Manages the currently selected date for viewing sessions.
+# Calendar Views:
+The application supports multiple calendar views (day, week, month) to display sessions.
+Each view allows users to interact with the calendar and select dates to view or schedule sessions.
+# UI Components:
+Components are designed for reusability and modularity, including a calendar component, session forms, and navigation elements.
+The UI is responsive, adapting to different screen sizes.
+# Styling:
+The application uses Tailwind CSS for styling, allowing for a utility-first approach to design.
+Assumptions Made
+Data Persistence:
+Sessions are stored in local storage, assuming that users will access the application from the same device. This may not be suitable for multi-device access.
+# User Authentication:
+The current design does not include user authentication. It assumes that users will switch roles manually, which may not be secure in a production environment.
+# Time Management:
+The system assumes that all time inputs are in the same timezone. There is no handling for timezone differences, which could lead to scheduling conflicts.
+4. Session Overlap:
+The system checks for overlapping sessions based on the arbitrator's schedule. It assumes that users will not attempt to book overlapping sessions.
+# Error Handling:
+Basic error handling is implemented (e.g., checking for valid date/time inputs), but more comprehensive error handling may be needed for a production environment.
+# Scalability:
+The current design is suitable for small to medium-sized applications. For larger applications, a more robust backend (e.g., a database) would be necessary to handle data persistence and user management.
+# Conclusion
+The system is designed to provide a user-friendly interface for managing arbitration sessions while ensuring that the core functionalities are met. However, there are several areas for improvement, particularly in user authentication, data persistence, and error handling, which should be addressed in future iterations.
