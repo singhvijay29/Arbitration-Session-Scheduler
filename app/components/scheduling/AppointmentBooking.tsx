@@ -33,6 +33,24 @@ const AppointmentBooking = () => {
     setAvailableSlot(formattedSlots);
   }, [selectedDate, bookingVersion]);
 
+  // New effect to listen for changes in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const sessions = JSON.parse(localStorage.getItem("sessions") || "[]");
+      const formattedSlots = {
+        date: selectedDate.toISOString().split("T")[0],
+        slots: sessions,
+      };
+      setAvailableSlot(formattedSlots);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [selectedDate]);
+
   // Get unique arbitrators from slots
   const arbitrators = [
     "all",

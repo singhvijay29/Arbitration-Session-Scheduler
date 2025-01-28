@@ -1,0 +1,101 @@
+[
+  {
+    "id": "1737980000000",
+    "caseNumber": "70460",
+    "date": "2025-02-02",
+    "time": "16:11",
+    "duration": "45",
+    "arbitrator": "vijay",
+    "claimant": "singhvijay8529@gmail.com",
+    "respondent": "singhvijay8529@gmail.com",
+    "end_time": "16:56"
+  },
+  {
+    "id": "1737980000001",
+    "caseNumber": "26980",
+    "date": "2025-01-31",
+    "time": "09:00",
+    "duration": "60",
+    "arbitrator": "vijay",
+    "claimant": "singhvijay8529@gmail.com",
+    "respondent": "singhvijay8529@gmail.com",
+    "end_time": "10:00"
+  },
+  {
+    "id": "1737980000002",
+    "caseNumber": "57043",
+    "date": "2025-02-03",
+    "time": "10:00",
+    "duration": "15",
+    "arbitrator": "vijay",
+    "claimant": "singhvijay8529@gmail.com",
+    "respondent": "singhvijay8529@gmail.com",
+    "end_time": "10:15"
+  },
+  {
+    "id": "1737980000003",
+    "caseNumber": "67962",
+    "date": "2025-02-02",
+    "time": "09:30",
+    "duration": "60",
+    "arbitrator": "arun",
+    "claimant": "singhvijay8529@gmail.com",
+    "respondent": "singhvijay8529@gmail.com",
+    "end_time": "10:30"
+  },
+  {
+    "id": "1737980000011",
+    "caseNumber": "71647",
+    "date": "2025-02-04",
+    "time": "13:16",
+    "duration": "30",
+    "arbitrator": "vijay",
+    "claimant": "singhvijay8529@gmail.com",
+    "respondent": "singhvijay8529@gmail.com",
+    "end_time": "13:46"
+  },
+  {
+    "id": "1737980000015",
+    "caseNumber": "62130",
+    "date": "2025-02-05",
+    "time": "09:00",
+    "duration": "30",
+    "arbitrator": "singh",
+    "claimant": "singhvijay8529@gmail.com",
+    "respondent": "singhvijay8529@gmail.com",
+    "end_time": "09:30"
+  },
+  {
+    "id": "1737980000016",
+    "caseNumber": "12345",
+    "date": "2025-02-06",
+    "time": "10:00",
+    "duration": "45",
+    "arbitrator": "john",
+    "claimant": "john.doe@example.com",
+    "respondent": "jane.smith@example.com",
+    "end_time": "10:45"
+  },
+  {
+    "id": "1737980000017",
+    "caseNumber": "67890",
+    "date": "2025-02-07",
+    "time": "11:00",
+    "duration": "30",
+    "arbitrator": "alice",
+    "claimant": "alice.jones@example.com",
+    "respondent": "bob.brown@example.com",
+    "end_time": "11:30"
+  },
+  {
+    "id": "1737980000018",
+    "caseNumber": "54321",
+    "date": "2025-02-08",
+    "time": "14:00",
+    "duration": "60",
+    "arbitrator": "charlie",
+    "claimant": "charlie.white@example.com",
+    "respondent": "diana.green@example.com",
+    "end_time": "15:00"
+  }
+]

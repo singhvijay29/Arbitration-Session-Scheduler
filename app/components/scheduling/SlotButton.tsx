@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useScheduler } from "../../context/SchedulerContext";
 
 interface Slot {
   id: string | number;
@@ -15,13 +16,14 @@ const SlotButton = ({
   onBookingChange?: () => void;
 }) => {
   const [isBooked, setIsBooked] = useState(false);
+  const { bookingVersion } = useScheduler();
 
   useEffect(() => {
     const bookedSlots = JSON.parse(
       localStorage.getItem("booked_slots") || "[]"
     ) as Slot[];
     setIsBooked(bookedSlots.some((slot) => slot.id === el.id));
-  }, [el.id]);
+  }, [el.id, bookingVersion]);
 
   const handleBooking = () => {
     const bookedSlots = JSON.parse(
